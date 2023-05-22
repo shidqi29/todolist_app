@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:todolist_app/screens/add_task_page.dart';
 import 'package:todolist_app/services/notification_services.dart';
 import 'package:todolist_app/services/theme_services.dart';
 import 'package:todolist_app/ui/themes.dart';
@@ -120,7 +121,9 @@ class addTaskBar extends StatelessWidget {
           ),
           MyButton(
             label: "+ Add Task",
-            onTap: () {},
+            onTap: () {
+              Get.to(AddTaskPage());
+            },
           ),
         ],
       ),
