@@ -122,7 +122,7 @@ class addTaskBar extends StatelessWidget {
           MyButton(
             label: "+ Add Task",
             onTap: () {
-              Get.to(AddTaskPage());
+              Get.to(() => AddTaskPage());
             },
           ),
         ],
