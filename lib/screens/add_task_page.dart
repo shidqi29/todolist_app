@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:todolist_app/controllers/task_controller.dart';
 import 'package:todolist_app/ui/themes.dart';
 import 'package:todolist_app/ui/widgets/button.dart';
 
+import '../models/task.dart';
 import '../ui/widgets/input_field.dart';
 
 class AddTaskPage extends StatefulWidget {
@@ -14,6 +16,26 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
+  final TaskController _taskController = Get.put(TaskController());
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   _titleController = TextEditingController();
+  //   _noteController = TextEditingController();
+  //   _taskController = Get.put(TaskController());
+  // }
+
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   super.dispose();
+  //   _titleController.dispose();
+  //   _noteController.dispose();
+  // }
+
   DateTime _selectedDate = DateTime.now();
   String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
   String _endTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
@@ -40,10 +62,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
               InputField(
                 title: "Title",
                 hint: "Enter Task Title",
+                controller: _titleController,
               ),
               InputField(
                 title: "Note",
                 hint: "Enter Your Note",
+                controller: _noteController,
               ),
               InputField(
                 title: "Date",
@@ -87,6 +111,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         },
                         icon: Icon(
                           Icons.access_time_outlined,
+                          color: Colors.grey,
                         ),
                       ),
                     ),
@@ -161,7 +186,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   _colorPallette(),
                   MyButton(
                     label: "Create Task",
-                    onTap: () {},
+                    onTap: () {
+                      _validateDate();
+                    },
                   )
                 ],
               )
@@ -288,5 +315,37 @@ class _AddTaskPageState extends State<AddTaskPage> {
         ),
       ],
     );
+  }
+
+  _validateDate() {
+    if (_titleController.text.isNotEmpty && _noteController.text.isNotEmpty) {
+      _addTaskToDb();
+      Get.back();
+    } else if (_titleController.text.isEmpty || _noteController.text.isEmpty) {
+      Get.snackbar(
+        "Required",
+        "All fields are required",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: pinkClr,
+        icon: Icon(Icons.warning_amber_outlined),
+      );
+    }
+  }
+
+  _addTaskToDb() async {
+    int value = await _taskController.addTask(
+      task: Task(
+        title: _titleController.text,
+        note: _noteController.text,
+        date: DateFormat.yMd().format(_selectedDate),
+        startTime: _startTime,
+        endTime: _endTime,
+        remind: _selectedRemind,
+        repeat: _selectedRepeat,
+        color: _selectedColor,
+        isCompleted: 0,
+      ),
+    );
+    print("Id is $value");
   }
 }

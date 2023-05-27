@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:todolist_app/controllers/task_controller.dart';
 import 'package:todolist_app/screens/add_task_page.dart';
 import 'package:todolist_app/services/notification_services.dart';
 import 'package:todolist_app/services/theme_services.dart';
@@ -32,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(),
+      backgroundColor: context.theme.scaffoldBackgroundColor,
       body: Column(
         children: [
           const addTaskBar(),
