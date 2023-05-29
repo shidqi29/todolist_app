@@ -16,25 +16,25 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
-  final TaskController _taskController = Get.put(TaskController());
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _noteController = TextEditingController();
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   _titleController = TextEditingController();
-  //   _noteController = TextEditingController();
-  //   _taskController = Get.put(TaskController());
-  // }
+  late final TaskController _taskController;
+  late final TextEditingController _titleController;
+  late final TextEditingController _noteController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _titleController = TextEditingController();
+    _noteController = TextEditingController();
+    _taskController = Get.put(TaskController());
+  }
 
-  // @override
-  // void dispose() {
-  //   // TODO: implement dispose
-  //   super.dispose();
-  //   _titleController.dispose();
-  //   _noteController.dispose();
-  // }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _titleController.dispose();
+    _noteController.dispose();
+  }
 
   DateTime _selectedDate = DateTime.now();
   String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
@@ -319,8 +319,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   _validateDate() {
     if (_titleController.text.isNotEmpty && _noteController.text.isNotEmpty) {
-      _addTaskToDb();
       Get.back();
+      _addTaskToDb();
     } else if (_titleController.text.isEmpty || _noteController.text.isEmpty) {
       Get.snackbar(
         "Required",

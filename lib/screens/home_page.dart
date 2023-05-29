@@ -21,6 +21,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var notifyHelper;
   DateTime _selectedDate = DateTime.now();
+  final _taskController = Get.put(TaskController());
   @override
   void initState() {
     // TODO: implement initState
@@ -31,29 +32,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print("build method called");
     return Scaffold(
       appBar: _appBar(),
       backgroundColor: context.theme.scaffoldBackgroundColor,
       body: Column(
         children: [
-          const addTaskBar(),
-          Container(
-            child: DatePicker(
-              DateTime.now(),
-              height: 100,
-              width: 80,
-              initialSelectedDate: DateTime.now(),
-              selectedTextColor: Colors.white,
-              deactivatedColor: Colors.grey,
-              selectionColor: primaryClr,
-              dateTextStyle: subHeadingStyle,
-              dayTextStyle: dayMonthStyle,
-              monthTextStyle: dayMonthStyle,
-              onDateChange: (selectedDate) {
-                _selectedDate = selectedDate;
-              },
-            ),
-          ),
+          _addTaskBar(),
+          _addDateBar(),
+          _showTasks(),
         ],
       ),
     );
@@ -92,15 +79,46 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
-}
 
-class addTaskBar extends StatelessWidget {
-  const addTaskBar({
-    super.key,
-  });
+  _addDateBar() {
+    return Container(
+      child: DatePicker(
+        DateTime.now(),
+        height: 100,
+        width: 80,
+        initialSelectedDate: DateTime.now(),
+        selectedTextColor: Colors.white,
+        deactivatedColor: Colors.grey,
+        selectionColor: primaryClr,
+        dateTextStyle: subHeadingStyle,
+        dayTextStyle: dayMonthStyle,
+        monthTextStyle: dayMonthStyle,
+        onDateChange: (selectedDate) {
+          _selectedDate = selectedDate;
+        },
+      ),
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
+  _showTasks() {
+    return Expanded(
+      child: Obx(() {
+        return ListView.builder(
+          itemCount: _taskController.taskList.length,
+          itemBuilder: (_, context) {
+            print(_taskController.taskList.length);
+            return Container(
+              height: 100,
+              width: 50,
+              color: Colors.green,
+            );
+          },
+        );
+      }),
+    );
+  }
+
+  _addTaskBar() {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Row(
@@ -123,8 +141,9 @@ class addTaskBar extends StatelessWidget {
           ),
           MyButton(
             label: "+ Add Task",
-            onTap: () {
-              Get.to(() => AddTaskPage());
+            onTap: () async {
+              await Get.to(() => AddTaskPage());
+              _taskController.getTasks();
             },
           ),
         ],
