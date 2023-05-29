@@ -10,7 +10,7 @@ import 'ui/themes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DBHelper .initDb();
+  await DBHelper.initDb();
   await GetStorage.init();
   runApp(MyApp());
 }
