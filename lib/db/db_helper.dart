@@ -19,7 +19,7 @@ class DBHelper {
           print("Creating a new one");
           return db.execute(
             "CREATE TABLE $_tableName("
-            "id INTEGER PRIMARY KEY AUTO INCREMENT,"
+            "id INTEGER PRIMARY KEY AUTOINCREMENT,"
             "title STRING, note TEXT, date STRING, "
             "startTime STRING, endTime STRING, "
             "remind INTEGER, repeat STRING, "
@@ -33,13 +33,17 @@ class DBHelper {
     }
   }
 
-  static Future<int> insert(Task? task) async {
+  static Future<int> insertTask(Task? task) async {
     print("insert function is called");
     return await _db?.insert(_tableName, task!.toJson()) ?? 1;
   }
 
-  static Future<List<Map<String, dynamic>>> query() async {
+  static Future<List<Map<String, dynamic>>> queryTask() async {
     print("query function is called");
     return await _db!.query(_tableName);
+  }
+
+  static deleteTask(Task task) async{
+    return await _db!.delete(_tableName, where: 'id=?', whereArgs: [task.id]);
   }
 }
