@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var notifyHelper;
+  late NotifyHelper notifyHelper;
   DateTime _selectedDate = DateTime.now();
   final _taskController = Get.put(TaskController());
   @override
@@ -31,6 +31,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     notifyHelper = NotifyHelper();
     notifyHelper.initializeNotification();
+    _taskController.getTasks();
   }
 
   @override
@@ -61,7 +62,7 @@ class _HomePageState extends State<HomePage> {
               body: Get.isDarkMode
                   ? "Activated Light Mode"
                   : "Activated Dark Mode");
-          notifyHelper.scheduledNotification();
+          // notifyHelper.scheduledNotification();
         },
         child: Icon(
           Get.isDarkMode
@@ -99,7 +100,9 @@ class _HomePageState extends State<HomePage> {
         dayTextStyle: dayMonthStyle,
         monthTextStyle: dayMonthStyle,
         onDateChange: (selectedDate) {
-          _selectedDate = selectedDate;
+          setState(() {
+            _selectedDate = selectedDate;
+          });
         },
       ),
     );
@@ -112,24 +115,55 @@ class _HomePageState extends State<HomePage> {
           itemCount: _taskController.taskList.length,
           itemBuilder: (_, index) {
             print(_taskController.taskList.length);
-            return AnimationConfiguration.staggeredList(
-              position: index,
-              child: SlideAnimation(
-                child: FadeInAnimation(
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          _showBottomSheet(
-                              context, _taskController.taskList[index]);
-                        },
-                        child: TaskTile(_taskController.taskList[index]),
-                      )
-                    ],
+            Task task = _taskController.taskList[index];
+            // print(task.toJson());
+            if (task.repeat == "Daily") {
+              DateTime date = DateFormat.jm().parse(task.startTime.toString());
+              var myTime = DateFormat("HH:mm").format(date);
+              notifyHelper.scheduledNotification(
+                int.parse(myTime.toString().split(":")[0]),
+                int.parse(myTime.toString().split(":")[1]),
+                task,
+              );
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                child: SlideAnimation(
+                  child: FadeInAnimation(
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _showBottomSheet(context, task);
+                          },
+                          child: TaskTile(task),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
+              );
+            }
+            if (task.date == DateFormat.yMd().format(_selectedDate)) {
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                child: SlideAnimation(
+                  child: FadeInAnimation(
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _showBottomSheet(context, task);
+                          },
+                          child: TaskTile(task),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            } else {
+              return Container();
+            }
           },
         );
       }),
@@ -193,6 +227,7 @@ class _HomePageState extends State<HomePage> {
                 : _bottomSheetButton(
                     label: "Task Completed",
                     onTap: () {
+                      _taskController.markTaskCompleted(task.id!);
                       Get.back();
                     },
                     color: primaryClr,
@@ -202,7 +237,6 @@ class _HomePageState extends State<HomePage> {
               label: "Delete Task",
               onTap: () {
                 _taskController.deleteTask(task);
-                _taskController.getTasks();
                 Get.back();
               },
               color: Colors.red[300]!,

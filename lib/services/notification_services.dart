@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:get/get.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:todolist_app/screens/notified_page.dart';
+
+import '../models/task.dart';
 
 class NotifyHelper {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin(); //
 
   initializeNotification() async {
-    tz.initializeTimeZones();
+    _configureLocalTimezone();
     // this is for latest iOS settings
     final DarwinInitializationSettings initializationSettingsIOS =
         DarwinInitializationSettings(
@@ -26,8 +30,10 @@ class NotifyHelper {
       iOS: initializationSettingsIOS,
       android: initializationSettingsAndroid,
     );
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
+    );
   }
 
   Future onDidReceiveLocalNotification(
@@ -38,20 +44,18 @@ class NotifyHelper {
   }
 
   void onDidReceiveNotificationResponse(
-      NotificationResponse notificationResponse) async {
+      NotificationResponse notificationResponse) {
     final String? payload = notificationResponse.payload;
     if (notificationResponse.payload != null) {
-      debugPrint('notification payload: $payload');
+      print('notification payload: $payload');
     } else {
       print('Notification Done');
     }
-    if (notificationResponse.payload == "Message") {
+    if (notificationResponse.payload == "Theme Changed") {
       print("Nothing to navigate ");
     } else {
       Get.to(
-        () => Container(
-          color: Colors.white,
-        ),
+        () => NotifiedPage(label: payload),
       );
     }
   }
@@ -67,12 +71,17 @@ class NotifyHelper {
         );
   }
 
-  displayNotification({required String title, required String body}) async {
+  Future<void> displayNotification(
+      {required String title, required String body}) async {
     print("Displaying Notification...");
     // ignore: prefer_const_constructors
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'your channel id', 'your channel name',
-        importance: Importance.max, priority: Priority.high);
+      'your channel id',
+      'your channel name',
+      channelDescription: 'your channel description',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
     // var iOSPlatformChannelSpecifics = iOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
@@ -87,23 +96,51 @@ class NotifyHelper {
     );
   }
 
-  scheduledNotification() async {
+  scheduledNotification(int hour, int minute, Task task) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
-        0,
-        'scheduled title',
-        'theme changes 5 seconds ago',
-        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 2)),
-        const NotificationDetails(
-          android: AndroidNotificationDetails(
-            'your channel id',
-            'your channel name',
-            importance: Importance.max,
-            priority: Priority.high,
-            icon: 'appicon',
-          ),
+      task.id!.toInt(),
+      task.title,
+      task.note,
+      _convertTime(hour, minute),
+      // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 2)),
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'your channel id',
+          'your channel name',
+          channelDescription: 'your channel description',
+          importance: Importance.max,
+          priority: Priority.high,
+          icon: 'appicon',
         ),
-        androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime);
+      ),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
+      payload: "${task.title}|" + "${task.note}|",
+    );
+  }
+
+  tz.TZDateTime _convertTime(int hour, int minute) {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduleDate = tz.TZDateTime(
+      tz.local,
+      now.year,
+      now.month,
+      now.day,
+      hour,
+      minute,
+    );
+    if (scheduleDate.isBefore(now)) {
+      scheduleDate = scheduleDate.add(const Duration(days: 1));
+    }
+    return scheduleDate;
+  }
+
+  Future<void> _configureLocalTimezone() async {
+    tz.initializeTimeZones();
+    final String timeZone = await FlutterNativeTimezone.getLocalTimezone();
+    print("My current time zone is $timeZone");
+    tz.setLocalLocation(tz.getLocation(timeZone));
   }
 }
