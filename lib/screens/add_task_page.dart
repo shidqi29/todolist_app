@@ -212,16 +212,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           color: Get.isDarkMode ? Colors.white : Colors.black,
         ),
       ),
-      actions: const [
-        CircleAvatar(
-          backgroundImage: AssetImage(
-            "images/profile.jpg",
-          ),
-        ),
-        SizedBox(
-          width: 20,
-        )
-      ],
+      elevation: 0,
     );
   }
 

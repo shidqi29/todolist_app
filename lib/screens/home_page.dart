@@ -53,6 +53,7 @@ class _HomePageState extends State<HomePage> {
 
   _appBar() {
     return AppBar(
+      elevation: 0,
       backgroundColor: context.theme.scaffoldBackgroundColor,
       leading: GestureDetector(
         onTap: () {
@@ -75,7 +76,7 @@ class _HomePageState extends State<HomePage> {
       actions: const [
         CircleAvatar(
           backgroundImage: AssetImage(
-            "images/profile.jpg",
+            "assets/user.png",
           ),
         ),
         SizedBox(
