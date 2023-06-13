@@ -73,16 +73,6 @@ class _HomePageState extends State<HomePage> {
           color: Get.isDarkMode ? Colors.white : Colors.black,
         ),
       ),
-      actions: const [
-        CircleAvatar(
-          backgroundImage: AssetImage(
-            "assets/user.png",
-          ),
-        ),
-        SizedBox(
-          width: 20,
-        )
-      ],
     );
   }
 
