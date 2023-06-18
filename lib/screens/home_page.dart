@@ -53,8 +53,16 @@ class _HomePageState extends State<HomePage> {
           await Get.to(() => AddTaskPage());
           _taskController.getTasks();
         },
-        label: Text("Add Task"),
-        icon: Icon(Icons.add_task_outlined),
+        label: Text(
+          "Add Task",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        icon: Icon(
+          Icons.add_task_outlined,
+          color: Colors.white,
+        ),
         backgroundColor: primaryClr,
       ),
     );
