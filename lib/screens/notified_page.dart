@@ -11,6 +11,7 @@ class NotifiedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Get.isDarkMode ? Colors.grey[600] : Colors.white,
         leading: IconButton(
           onPressed: () {

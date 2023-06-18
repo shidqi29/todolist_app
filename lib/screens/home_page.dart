@@ -48,6 +48,15 @@ class _HomePageState extends State<HomePage> {
           _showTasks(),
         ],
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          await Get.to(() => AddTaskPage());
+          _taskController.getTasks();
+        },
+        label: Text("Add Task"),
+        icon: Icon(Icons.add_task_outlined),
+        backgroundColor: primaryClr,
+      ),
     );
   }
 
@@ -181,13 +190,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-          ),
-          MyButton(
-            label: "+ Add Task",
-            onTap: () async {
-              await Get.to(() => AddTaskPage());
-              _taskController.getTasks();
-            },
           ),
         ],
       ),
