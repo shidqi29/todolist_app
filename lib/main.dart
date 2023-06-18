@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:todolist_app/db/db_helper.dart';
+import 'package:todolist_app/screens/splash_screen.dart';
 
 import 'services/theme_services.dart';
 import 'screens/home_page.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: Themes.light,
       darkTheme: Themes.dark,
       themeMode: ThemeService().theme,
-      home: HomePage(),
+      home: SplashScreen(),
     );
   }
 }
