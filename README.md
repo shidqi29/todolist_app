@@ -1,16 +1,58 @@
-# todolist_app
 
-A new Flutter project.
+# To Do List App
 
-## Getting Started
+Aplikasi to-do list adalah alat digital yang membantu Anda membuat daftar tugas yang perlu dilakukan, mengatur prioritas, menjadwalkan, dan melacak kemajuan Anda dalam menyelesaikan tugas-tugas tersebut. Dengan fitur-fitur seperti pengingat dan tanda centang, aplikasi ini membantu meningkatkan efisiensi dan produktivitas Anda dalam mengelola tugas-tugas sehari-hari.
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Authors
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- [@Shidqi Amirul Haq](https://github.com/shidqi29)
+- [@Reza Muhammad Zulfikar](https://github.com/rezamuhammadzulfikar)
+- [@Sarah Khoerunisa](https://github.com/sarahkhhh)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/shidqi29/todolist_app.git
+```
+
+Go to the project directory
+
+```bash
+  cd todolist_app
+```
+
+Install dependencies
+
+```bash
+  flutter pub get
+```
+
+Run the app
+
+```bash
+  flutter run
+```
+
+
+## Screenshots
+- Light Mode
+<div>
+  <img src="https://i.imgur.com/0XRplPa.jpg" alt="Splash Screen" width= 225/>
+  <img src="https://i.imgur.com/yHgAZiA.jpg" alt="Home Page (Light Mode)" width= 225/>
+  <img src="https://i.imgur.com/GhYAhBQ.jpg" alt="Add Task (Light Mode)" width= 225/>
+  <img src="https://i.imgur.com/lXiVItj.jpg" alt="Bottom Sheet (Light Mode)" width= 225/>
+  <img src="https://i.imgur.com/QRE09uG.jpg" alt="Notification Page (Light Mode)" width= 225/>
+</div>
+
+- Dark Mode
+<div>
+  <img src="https://i.imgur.com/QqbMTRu.jpg" alt="Home Page (Dark Mode)" width= 225/>
+  <img src="https://i.imgur.com/cCBopKi.jpg" alt="Add Task (Dark Mode)" width= 225/>
+  <img src="https://i.imgur.com/XnnZb5S.jpg" alt="Bottom Sheet (Dark Mode)" width= 225/>
+  <img src="https://i.imgur.com/MURSPCd.jpg" alt="Notification Page (Dark Mode)" width= 225/>
+</div>
+
